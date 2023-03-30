@@ -11,12 +11,28 @@
 		<relativePath/>
 	</parent>
 		
-	<dependencies>		
+	<dependencies>	
+	
+		<!-- 
+			Di default, l'implementazione di JPA utilizzata è l'ORM Hibernate, ma è
+			possibile escludere manualmente la dipendenza da Hibernate per usare
+			un'altra implementazione (es. Eclipse Link). Esistono molti altri
+			moduli Spring Data che permettono di interagire con un DB, anche
+			utilizzando API differenti o DB non relazionali.
+		-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!--
+			Hibernate fornisce delle astrazioni di alto livello per l'interfacciamento
+			con il DB, ma si appoggia comunque all'API JDCB per stabilire la connessione
+			ed effettuare le operazioni di I/O. Pertanto, bisogna includere tra le
+			dipendenze il driver JDBC appropriato per il DB che intendiamo usare.
+		-->
+		
 		<dependency>
 			<groupId>com.h2database</groupId>
     		<artifactId>h2</artifactId>
@@ -30,6 +46,19 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!--
+				Questo secondo plugin serve per correggere un bug nel parsing del file
+				application.properties. Di default viene usata una versione più recente,
+				che però crasha se vengono scritti caratteri accentati (es. "è") nel
+				file (cosa che capita, scrivendo i commenti in italiano).
+			-->
+			
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-resources-plugin</artifactId>
+			    <version>3.1.0</version>
+			</plugin> 
 		</plugins>
 	</build>
 </project>
